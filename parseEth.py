@@ -5,6 +5,7 @@ import signalObject
 # FEATURE SWITCHES
 #
 DEBUG = 0
+PDU_HDR_LEN = 8
 
 #
 # HELPER FUNCTIONS
@@ -32,8 +33,14 @@ def fillListOfSignals(listOfSignals):
 	signalX = signalObject.SignalObject("test", 0,0,8,0)
 	
 	#TODO: Get data from DBC
-	signalX.name = "SIGNAL1"
+	signalX.name = "PDU_HDR"
 	signalX.startbyte = 0
+	signalX.startbit = 0
+	signalX.length = 64
+	listOfSignals.append(signalX.copy())
+
+	signalX.name = "SIGNAL1"
+	signalX.startbyte = 0 + PDU_HDR_LEN
 	signalX.startbit = 0
 	signalX.length = 10
 	listOfSignals.append(signalX.copy())
@@ -41,7 +48,7 @@ def fillListOfSignals(listOfSignals):
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
 
 	signalX.name = "SIGNAL2"
-	signalX.startbyte = 1
+	signalX.startbyte = 1 + PDU_HDR_LEN
 	signalX.startbit = 0
 	signalX.length = 13
 	listOfSignals.append(signalX.copy())
@@ -49,7 +56,7 @@ def fillListOfSignals(listOfSignals):
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
 
 	signalX.name = "SIGNAL3"
-	signalX.startbyte = 3
+	signalX.startbyte = 3 + PDU_HDR_LEN
 	signalX.startbit = 0
 	signalX.length = 2
 	listOfSignals.append(signalX.copy())
@@ -57,7 +64,7 @@ def fillListOfSignals(listOfSignals):
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
 
 	signalX.name = "SIGNAL4"
-	signalX.startbyte = 4
+	signalX.startbyte = 4 + PDU_HDR_LEN
 	signalX.startbit = 0
 	signalX.length = 35
 	listOfSignals.append(signalX.copy())
