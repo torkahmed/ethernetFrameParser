@@ -1,26 +1,54 @@
-import copy
+import signalObject
 
-class SignalObject(object):
-	"""docstring for SignalObject"""
-	startbyte = 0
-	startbit = 0
-	length = 0
-	value = 0
-	
-	#Constructor
-	def __init__(self, startbyte, startbit, length, value):
-		self.startbyte = startbyte
-		self.startbit = startbit
-		self.length = length
-		self.value = value	
-
-	def copy(self):
-	# return SignalObject(self.startbyte, self.startbit, self.length, self.value)
-		return SignalObject(copy.copy(self.startbyte), copy.copy(self.startbit), copy.copy(self.length), copy.copy(self.value))
+#
+# FEATURE SWITCHES
+#
+DEBUG = 0
 
 #
 # HELPER FUNCTIONS
 #
+
+def fillListOfSignals(listOfSignals):
+
+	signalX = signalObject.SignalObject(0,0,8,0)
+	
+	#TODO: Get data from DBC
+	signalX.startbyte = 0
+	signalX.startbit = 0
+	signalX.length = 8
+	listOfSignals.append(signalX.copy())
+	if DEBUG == 1:
+		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
+
+	signalX.startbyte = 1
+	signalX.startbit = 0
+	signalX.length = 16
+	listOfSignals.append(signalX.copy())
+	if DEBUG == 1:
+		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
+
+	signalX.startbyte = 3
+	signalX.startbit = 0
+	signalX.length = 8
+	listOfSignals.append(signalX.copy())
+	if DEBUG == 1:
+		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
+
+	signalX.startbyte = 4
+	signalX.startbit = 0
+	signalX.length = 32
+	listOfSignals.append(signalX.copy())
+	if DEBUG == 1:
+		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)	
+	pass
+
+def getHexDump():
+	#get hex dump, TODO: import from wireshark, and filter to this format
+	#This hex dump needs to be in this format, big endian, hex values, discarding PDU and frame headers
+	hexDump = "00 ab cd dd fe ff df dd 12 31"
+	return hexDump
+
 def filterHexToBin(hexDump):
 	spaces = ' '
 	outputBinary = ""
@@ -34,65 +62,58 @@ def filterHexToBin(hexDump):
 			#Adding Left 0s
 			if (char == '0') & (foundOnes == 0):
 				outputBinary = "0000" + outputBinary
-				print "Added 0s"
+				if DEBUG == 1:
+					print "Added 0s"
 			else:
 				foundOnes = 1
-				print "Found nonzero"
+				if DEBUG == 1:
+					print "Found nonzero"
 				pass
 			pass
 		pass
 	pass
-	print "Filtered hexDump = %s" % (outputDump)
+	if DEBUG == 1:
+		print "Filtered hexDump = %s" % (outputDump)
 
 	outputBinary = outputBinary + bin(int(outputDump, 16))[2:]
 
-	print "Filtered Bin = %s with length %s" % (outputBinary, len(outputBinary))
+	if DEBUG == 1:
+		print "Filtered Bin = %s with length %s" % (outputBinary, len(outputBinary))
 
 	return outputBinary
 
 
+def evaluateSignalValues(listOfSignals):
+	for signal in listOfSignals:
+		if DEBUG == 1:
+			print "Sig SB: %s, Sb: %s" % (signal.startbyte, signal.startbit)
+		index = (signal.startbyte * 8) + signal.startbit
+		signal.value = BinaryStream[index : (index + signal.length)]
+		if DEBUG == 1:
+			print "Signal value: %s " % (signal.value)
+		pass	
+
+
+def printSignals(listOfSignals):
+	print "#############################"
+	print "#############################"
+	for idx,signal in enumerate(listOfSignals):
+		print "Signal[%s] has value %s (%s)" % (idx, int(signal.value, 2) , signal.value)
+	print "#############################"
+	print "#############################"
+#
+# MAIN
+#
 
 #define start bytes/bits for all signals. TODO: read from DFL file
 listOfSignals = []
-signalX = SignalObject(0,0,8,0)
+fillListOfSignals(listOfSignals)
 
-signalX.startbyte = 0
-signalX.startbit = 0
-signalX.length = 8
-listOfSignals.append(signalX.copy())
-print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
-
-signalX.startbyte = 1
-signalX.startbit = 0
-signalX.length = 16
-listOfSignals.append(signalX.copy())
-print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
-
-signalX.startbyte = 3
-signalX.startbit = 0
-signalX.length = 8
-listOfSignals.append(signalX.copy())
-print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
-
-signalX.startbyte = 4
-signalX.startbit = 0
-signalX.length = 32
-listOfSignals.append(signalX.copy())
-print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
-
-
-#get hex dump, TODO: import from wireshark, and filter to this format
-#This hex dump needs to be in this format, big endian, hex values, discarding PDU and frame headers
-hexDump = "00 ab cd dd fe ff df dd 12 31"
+hexDump = getHexDump()
 
 BinaryStream = filterHexToBin(hexDump)
 
-print "First Element:: SB %s Sb %s Length %s Value %s" % (listOfSignals[0].startbyte, listOfSignals[0].startbit, listOfSignals[0].length, listOfSignals[0].value) 
-
 # Get Signal Values from Byte Stream
-for signal in listOfSignals:
-	print "Sig SB: %s, Sb: %s" % (signal.startbyte, signal.startbit)
-	index = (signal.startbyte * 8) + signal.startbit
-	signal.value = BinaryStream[index : (index + signal.length)]
-	print "Signal value: %s " % (signal.value)
-	pass
+evaluateSignalValues(listOfSignals)
+# Print Values
+printSignals(listOfSignals)
