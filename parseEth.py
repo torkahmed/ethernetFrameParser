@@ -1,3 +1,4 @@
+from copy import copy
 import signalObject
 
 #
@@ -9,6 +10,23 @@ DEBUG = 0
 # HELPER FUNCTIONS
 #
 
+
+def parseWiresharkHexDump(listOfSignals):
+	# This function parses a wireshark hex dump
+	outputHexdump = ""
+
+	f = open("wiresharkHexDump.txt", "r")
+	hexdump = f.read()
+	hexdump = hexdump.split(" ")
+
+	for element in hexdump:
+		if len(element) == 2:
+			outputHexdump = outputHexdump + copy(element)
+			pass
+		pass
+
+	return outputHexdump
+
 def fillListOfSignals(listOfSignals):
 
 	signalX = signalObject.SignalObject("test", 0,0,8,0)
@@ -17,7 +35,7 @@ def fillListOfSignals(listOfSignals):
 	signalX.name = "SIGNAL1"
 	signalX.startbyte = 0
 	signalX.startbit = 0
-	signalX.length = 8
+	signalX.length = 10
 	listOfSignals.append(signalX.copy())
 	if DEBUG == 1:
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
@@ -25,7 +43,7 @@ def fillListOfSignals(listOfSignals):
 	signalX.name = "SIGNAL2"
 	signalX.startbyte = 1
 	signalX.startbit = 0
-	signalX.length = 16
+	signalX.length = 13
 	listOfSignals.append(signalX.copy())
 	if DEBUG == 1:
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
@@ -33,7 +51,7 @@ def fillListOfSignals(listOfSignals):
 	signalX.name = "SIGNAL3"
 	signalX.startbyte = 3
 	signalX.startbit = 0
-	signalX.length = 8
+	signalX.length = 2
 	listOfSignals.append(signalX.copy())
 	if DEBUG == 1:
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
@@ -41,7 +59,7 @@ def fillListOfSignals(listOfSignals):
 	signalX.name = "SIGNAL4"
 	signalX.startbyte = 4
 	signalX.startbit = 0
-	signalX.length = 32
+	signalX.length = 35
 	listOfSignals.append(signalX.copy())
 	if DEBUG == 1:
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)	
@@ -111,9 +129,11 @@ def printSignals(listOfSignals):
 
 #define start bytes/bits for all signals. TODO: read from DFL file
 listOfSignals = []
+
 fillListOfSignals(listOfSignals)
 
-hexDump = getHexDump()
+# hexDump = getHexDump()
+hexDump = parseWiresharkHexDump(listOfSignals)
 
 BinaryStream = filterHexToBin(hexDump)
 
