@@ -11,9 +11,10 @@ DEBUG = 0
 
 def fillListOfSignals(listOfSignals):
 
-	signalX = signalObject.SignalObject(0,0,8,0)
+	signalX = signalObject.SignalObject("test", 0,0,8,0)
 	
 	#TODO: Get data from DBC
+	signalX.name = "SIGNAL1"
 	signalX.startbyte = 0
 	signalX.startbit = 0
 	signalX.length = 8
@@ -21,6 +22,7 @@ def fillListOfSignals(listOfSignals):
 	if DEBUG == 1:
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
 
+	signalX.name = "SIGNAL2"
 	signalX.startbyte = 1
 	signalX.startbit = 0
 	signalX.length = 16
@@ -28,6 +30,7 @@ def fillListOfSignals(listOfSignals):
 	if DEBUG == 1:
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
 
+	signalX.name = "SIGNAL3"
 	signalX.startbyte = 3
 	signalX.startbit = 0
 	signalX.length = 8
@@ -35,6 +38,7 @@ def fillListOfSignals(listOfSignals):
 	if DEBUG == 1:
 		print "Incrementing Signal with SB %s and Sb %s and length %s" % (signalX.startbyte, signalX.startbit, signalX.length)
 
+	signalX.name = "SIGNAL4"
 	signalX.startbyte = 4
 	signalX.startbit = 0
 	signalX.length = 32
@@ -98,7 +102,7 @@ def printSignals(listOfSignals):
 	print "#############################"
 	print "#############################"
 	for idx,signal in enumerate(listOfSignals):
-		print "Signal[%s] has value %s (%s)" % (idx, int(signal.value, 2) , signal.value)
+		print "Signal[%s] with name %s has value %s (%s)" % (idx, signal.name, int(signal.value, 2) , signal.value)
 	print "#############################"
 	print "#############################"
 #

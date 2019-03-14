@@ -8,7 +8,8 @@ class SignalObject(object):
 	value = 0
 	
 	#Constructor
-	def __init__(self, startbyte, startbit, length, value):
+	def __init__(self, name, startbyte, startbit, length, value):
+		self.name = name
 		self.startbyte = startbyte
 		self.startbit = startbit
 		self.length = length
@@ -16,4 +17,4 @@ class SignalObject(object):
 
 	def copy(self):
 	# return SignalObject(self.startbyte, self.startbit, self.length, self.value)
-		return SignalObject(copy.copy(self.startbyte), copy.copy(self.startbit), copy.copy(self.length), copy.copy(self.value))
+		return SignalObject(copy.copy(self.name), copy.copy(self.startbyte), copy.copy(self.startbit), copy.copy(self.length), copy.copy(self.value))
