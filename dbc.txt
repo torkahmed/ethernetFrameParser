@@ -1,0 +1,27 @@
+######################
+TEST DBC FILE
+random text here
+######################
+
+frame POS_GNSS_OCU_01 492
+
+pdu OCU_01_PDU_1
+
+signal TEST_SIGNAL1 0 0 8
+signal_done
+
+signal TEST_SIGNAL2 1 0 8
+signal_done
+
+pdu_done
+
+pdu OCU_01_PDU_2
+
+signal TEST_SIGNAL3 0 0 4
+signal_done
+
+pdu_done
+
+frame_done
+
+frame SHOULDNT_COME_HERE

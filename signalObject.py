@@ -2,6 +2,7 @@ import copy
 
 class SignalObject(object):
 	"""docstring for SignalObject"""
+	name = "no_name"
 	startbyte = 0
 	startbit = 0
 	length = 0
@@ -16,5 +17,4 @@ class SignalObject(object):
 		self.value = value	
 
 	def copy(self):
-	# return SignalObject(self.startbyte, self.startbit, self.length, self.value)
 		return SignalObject(copy.copy(self.name), copy.copy(self.startbyte), copy.copy(self.startbit), copy.copy(self.length), copy.copy(self.value))
